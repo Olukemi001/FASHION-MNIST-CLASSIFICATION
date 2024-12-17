@@ -42,6 +42,7 @@ Fashion-MNIST-Project/
 ├── visualization.ipynb         # Prediction and visualization module
 ├── convert_ipynb_to_py1.ipynb   # Notebook-to-script conversion module
 ├── main.ipynb                  # Main script integrating all modules
+├── FASHION_MNIST_PROJECT1.R     # Single module script in R for the classification
 ├── README.md                # Project documentation
 ```
 
