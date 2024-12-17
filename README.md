@@ -1,5 +1,5 @@
-# FASHION-MNIST-CLASSIFICATION
-# **Fashion MNIST Image Classification**
+# FASHION-MNIST-CLASSIFICATION IN BOTH PYTHON AND R
+# **Fashion MNIST Image Classification in Python**
 
 ## **Project Overview**
 This project focuses on classifying images from the Fashion MNIST dataset using a Convolutional Neural Network (CNN). The dataset consists of 60,000 training images and 10,000 test images representing 10 classes of fashion items. The project is organized into five Python modules for efficient processing, model training, visualization, and integration.
@@ -130,9 +130,139 @@ This will preprocess the data, train the model, evaluate it, and visualize predi
 
 ---
 
-## **Future Improvements**
-- Experiment with different CNN architectures to improve accuracy.
-- Add support for hyperparameter tuning using libraries like Keras Tuner.
-- Incorporate advanced visualization techniques such as Grad-CAM for better interpretability.
+## **Visualisation Interpretation**
+- Ankle boot with a confidence level of 99.98% was predicted.
+- A pullover with a confidence level of 99.96% was predicted.
+- A trouser with  a confidence level of 100% was predicted.
+- Please not that the images were color graded from greyscale for better clarity.
+
+
+# **Fashion MNIST Image Classification in R**
+
+This repository contains an R script to train a Convolutional Neural Network (CNN) model using the Fashion MNIST dataset, a collection of 60,000 28x28 grayscale images of 10 fashion categories. The script demonstrates how to preprocess the data, build a CNN model, train it, evaluate performance, and visualize predictions using R and the `keras` package.
+
+## Prerequisites
+
+Before running the script, ensure that the following software and packages are installed:
+
+### Software:
+- R (version 4.4.2 or higher recommended)
+- Python (Python 3.7, 3.8, or 3.9 are usually recommended) TensorFlow and Keras in R rely on the underlying Python environment.
+- TensorFlow does not support Python 3.12 yet
+- RStudio 
+
+### Required R Packages:
+- `keras`: For building and training neural network models
+- `tensorflow`: Backend for Keras, responsible for performing computations
+- `tensorflow` needs to be installed and configured properly for Keras to work. The function `install_keras()` handles the installation.
+
+### Installation Instructions
+
+Follow these steps to install the required libraries:
+
+1. **Install Keras and TensorFlow in R:**
+
+   The script automatically installs `keras` and `tensorflow` packages if not already installed using the `install_keras()` function.
+
+   Alternatively, if you want to manually install the packages, run the following commands in R:
+
+   ```r
+   install.packages("keras")
+   library(keras)
+   install_keras()  # Installs TensorFlow and other dependencies
+   ```
+
+2. **Install additional dependencies**:
+   If needed, run the following commands to install any other dependencies that the script uses.
+
+   ```r
+   install.packages("tensorflow")
+   ```
+
+## Script Breakdown
+
+The script performs the following tasks:
+
+### 1. **Install and Load Libraries**
+   The `install_keras()` function ensures that the `keras` and `tensorflow` packages are installed and loaded correctly.
+
+### 2. **Load and Preprocess the Fashion MNIST Dataset**
+   The `load_and_preprocess_data()` function loads the Fashion MNIST dataset using the `dataset_fashion_mnist()` function provided by `keras`. It performs the following steps:
+   - Normalizes the image data (scaling pixel values to the range [0, 1]).
+   - Reshapes the images to have a channel dimension (28x28x1).
+   - One-hot encodes the labels (converts categorical labels into binary vectors).
+
+### 3. **Create the CNN Model**
+   The `create_model()` function defines a Convolutional Neural Network (CNN) model with the following architecture:
+   - **Conv2D Layer**: 32 filters with a kernel size of 3x3, ReLU activation.
+   - **MaxPooling2D Layer**: Pool size of 2x2.
+   - **Conv2D Layer**: 64 filters with a kernel size of 3x3, ReLU activation.
+   - **MaxPooling2D Layer**: Pool size of 2x2.
+   - **Flatten Layer**: Flatten the 2D images into 1D vectors.
+   - **Dense Layer**: Fully connected layer with 128 units and ReLU activation.
+   - **Dropout Layer**: Dropout with rate 0.5 to reduce overfitting.
+   - **Dense Layer**: Output layer with 10 units (one for each class) and softmax activation to produce class probabilities.
+
+   The model is compiled using the **Adam optimizer** and **categorical crossentropy loss**.
+
+### 4. **Train the Model**
+   The `train_model()` function trains the CNN model using the training data. It accepts the following parameters:
+   - `epochs`: The number of epochs for training (default is 10).
+   - `batch_size`: The size of each batch of data (default is 64).
+   - `validation_split`: The proportion of the training data to use for validation (default is 0.2).
+
+   The model is trained using the `fit()` method, and the training history is returned.
+
+### 5. **Evaluate the Model**
+   The `evaluate_model()` function evaluates the trained model on the test data. It returns the loss and accuracy on the test dataset.
+
+### 6. **Visualize Predictions**
+   The `visualize_predictions()` function visualizes the predictions made by the model for a given set of sample indices. It:
+   - Takes a set of test images.
+   - Makes predictions using the model.
+   - Plots the true labels, predicted labels, and the confidence of the predictions.
+
+### 7. **Class Names**
+   The script includes the following class names corresponding to the Fashion MNIST dataset:
+   ```r
+   class_names <- c("T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", 
+                    "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot")
+   ```
+
+### Example Workflow:
+```r
+# Load and preprocess data
+data <- load_and_preprocess_data()
+
+# Create CNN model
+model <- create_model()
+
+# Train the model
+history <- train_model(model, data$x_train, data$y_train, epochs = 10)
+
+# Evaluate the model
+evaluation <- evaluate_model(model, data$x_test, data$y_test)
+cat("Test Accuracy:", evaluation[2] * 100, "%\n")
+
+# Visualize predictions
+sample_indices <- c(1, 2, 3, 4)
+visualize_predictions(model, data$x_test, data$y_test, sample_indices, class_names)
+```
+
+## Expected Output:
+1. **Training History**: The `train_model()` function will print training progress including loss and accuracy per epoch.
+2. **Test Accuracy**: The `evaluate_model()` function will output the test accuracy of the model after evaluation.
+3. **Prediction Visualization**: The `visualize_predictions()` function will display the images along with the true labels, predicted labels, and prediction confidence for a subset of test samples.
+
+## Troubleshooting
+- **Error: Unable to install packages**: Ensure that you have internet access and the correct permissions to install packages. Running RStudio as an administrator may help resolve permission issues.
+- **Error: No GPU available**: If you don't have a GPU available for TensorFlow, the model will still run on the CPU but will be slower. Make sure you have installed the necessary CPU version of TensorFlow.
+- **Memory errors**: If you run into memory issues, try reducing the batch size or using a smaller subset of the dataset.
+
+
+# **PROJECT CONCLUSION**
+This project uses a Convolutional Neural Network (CNN) model built in both Python and R with the `keras` package to classify images from the Fashion MNIST dataset, which contains 60,000 28x28 grayscale images of 10 different fashion categories. The model architecture consists of two convolutional layers, max-pooling layers, and dense layers with dropout for regularization. After training the model for 10 epochs, the test accuracy is evaluated and predictions are visualized for a set of test images. The results show a well-trained model capable of making accurate predictions, with test accuracy around 90%, demonstrating the effectiveness of CNNs for image classification tasks.
+
+
 
 
